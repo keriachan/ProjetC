@@ -27,22 +27,24 @@ typedef struct {
 // Les fonctions :
 
 int jeu_capturer(Jeu *jeu, int i, int j){ // assurer que i j capturable
-    if ((*jeu).plateau.pion[i][j] == 1){
+    if ((*jeu).plateau.pion[i][j] == 1) {
         (*jeu).joueur[(*jeu).joueur_courant].score  += 1;
     } else if ((*jeu).plateau.pion[i][j] == 2) {
         (*jeu).joueur[(*jeu).joueur_courant].score  += 5;
-    } else {
+    } else if ((*jeu).plateau.pion[i][j] == 3) {
         (*jeu).joueur[(*jeu).joueur_courant].score  += 8;
+    } else {
+        return 0;
     }
     (*jeu).plateau.pion[i][j] = 0;
-    return 0;
+    return 1;
 }
 
 int jeu_saisir_pion(Jeu *jeu, int i, int j){
     (*jeu).pion_est_saisi = 1;
     (*jeu).pion_i = i;
     (*jeu).pion_j = j;
-    return 0;
+    return 1;
 }
 
 int jeu_sauter_vers(Jeu *jeu, int i, int j){ // assurer qu'on peu bien sauter en i j
@@ -51,16 +53,16 @@ int jeu_sauter_vers(Jeu *jeu, int i, int j){ // assurer qu'on peu bien sauter en
     jeu_capturer(jeu, cap_i, cap_j);
     (*jeu).pion_i = i;
     (*jeu).pion_j = j;
-    return 0;
+    return 1;
 }
 
 int jeu_arreter(Jeu *jeu){
     if ((*jeu).nb_joueurs > 1){
         (*jeu).joueur[(*jeu).joueur_courant].etat = 0;
         (*jeu).nb_joueurs -= 1;
-        return 0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 int jeu_joueur_suivant(Jeu *jeu){
@@ -68,7 +70,7 @@ int jeu_joueur_suivant(Jeu *jeu){
     (*jeu).pion_est_saisi = 0;
     (*jeu).pion_i = 0;
     (*jeu).pion_j = 0;
-    return 0
+    return 1;
 }
 
 void jeu_charger(Jeu *jeu) {
@@ -80,7 +82,7 @@ void jeu_ecrire(Jeu *jeu){
 }
 
 int plateau_pion_peut_sauter(Plateau *plateau, int i, int j){
-
+    if ((*plateau).pion[i][j] == 0 && (*plateau).pion[][j] != 0) // wsh mais on verifie que le pion peu sauter en i j ou que le pion en i j peu sauter cest quoi ce kk
 }
 
 int case_est_valide(int i, int j){
