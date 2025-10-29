@@ -99,6 +99,9 @@ void jeu_ecrire(Jeu *jeu){
 
 int plateau_pion_peut_sauter(Plateau *plateau, int i, int j){
     int dx[] = {0, 1, 1, 1, 0, -1, -1, -1}, dy[] = {1, 1, 0, -1, -1, -1, 0, 1};
+    if ((*plateau).pion[i][j]==0){
+        return 0;
+    }
     for (int i = 0; i < 8; i++){
         if ((*plateau).pion[i+dx[i]][j+dy[i]] != 0 && (*plateau).pion[i+2*dx[i]][j+2*dy[i]] == 0)
             return 1;
@@ -107,7 +110,11 @@ int plateau_pion_peut_sauter(Plateau *plateau, int i, int j){
 }
 
 int case_est_valide(int i, int j){
-
+    if (i>=1 && i<=8 && j>=1 && j<=8){
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 void jeu_afficher(Jeu *jeu){
@@ -195,14 +202,14 @@ int main(void) {
             } else {
                 do {
                     printf("Position du pion sauteur : ");
-                    scanf("%d %d", i_pion, j_pion);
+                    scanf("%d %d", &i_pion, &j_pion);
                     i_pion -= 1;
                     j_pion -= 1;
                 } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] == 0);
                 jeu_saisir_pion(&jeu, i_pion, j_pion);
                 do {
                     printf("Position du saut : ");
-                    scanf("%d %d", i_pion, j_pion);
+                    scanf("%d %d", &i_pion, &j_pion);
                     i_pion -= 1;
                     j_pion -= 1;
                 } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] != 0);
