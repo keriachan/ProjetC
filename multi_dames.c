@@ -20,6 +20,7 @@ typedef struct {
     Plateau plateau;
     Joueur joueur[MAX_JOUEURS];
     int nb_joueurs;
+    int nb_joueurs_actif;
     int joueur_courant;
     int tour;
     int pion_est_saisi; // 1 si un pion est saisi, 0 sinon
@@ -59,7 +60,7 @@ int jeu_sauter_vers(Jeu *jeu, int i, int j){ // assurer qu'on peu bien sauter en
 }
 
 int jeu_arreter(Jeu *jeu){
-    int nb_j = 0;
+    /*int nb_j = 0;
     for (int i = 0; i < (*jeu).nb_joueurs; i++){
         if ((*jeu).joueur[i].etat == 1){
             nb_j += 1;
@@ -67,6 +68,12 @@ int jeu_arreter(Jeu *jeu){
     }
     if (nb_j > 1){
         (*jeu).joueur[(*jeu).joueur_courant].etat = 0;
+        return 1;
+    }
+    return 0;*/
+    if ((*jeu).nb_joueurs_actif > 1){
+        (*jeu).joueur[(*jeu).joueur_courant].etat = 0;
+        (*jeu).nb_joueurs_actif -= 1;
         return 1;
     }
     return 0;
@@ -83,24 +90,7 @@ int jeu_joueur_suivant(Jeu *jeu){
 }
 
 void jeu_charger(Jeu *jeu) {
-    printf("Score:\n    J1  J2  J3  J4\n    %d   %d   %d   %d\nTour: %d\nJoueur %d\nPlateau:\n", (*jeu).joueur[0].score, (*jeu).joueur[1].score, (*jeu).joueur[2].score, (*jeu).joueur[3].score, (*jeu).tour, (*jeu).joueur_courant + 1);
-    for (int i = 0; i < TAILLE + 1; i++){
-        for (int j = 0; j < TAILLE + 1; j++){
-            if ((i == 0 || i == 1) && j == 0)
-                printf("  ");
-            else if (i == 0)
-                printf(" %d", j);
-            else if (i == 1)
-                printf("--");
-            else if (j == 0)
-                printf("%d ", i);
-            else if (j == 1)
-                printf("|%d", (*jeu).plateau.pion[i-1][j-1]);
-            else
-                printf(" %d", (*jeu).plateau.pion[i-1][j-1]);
-        }
-        printf("\n");
-    }
+    
 }
 
 void jeu_ecrire(Jeu *jeu){
@@ -121,7 +111,24 @@ int case_est_valide(int i, int j){
 }
 
 void jeu_afficher(Jeu *jeu){
-
+    printf("Score:\n    J1  J2  J3  J4\n    %d   %d   %d   %d\nTour: %d\nJoueur %d\nPlateau:\n", (*jeu).joueur[0].score, (*jeu).joueur[1].score, (*jeu).joueur[2].score, (*jeu).joueur[3].score, (*jeu).tour, (*jeu).joueur_courant + 1);
+    for (int i = 0; i < TAILLE + 2; i++){
+        for (int j = 0; j < TAILLE + 1; j++){
+            if ((i == 0 || i == 1) && j == 0)
+                printf("  ");
+            else if (i == 0)
+                printf(" %d", j);
+            else if (i == 1)
+                printf("--");
+            else if (j == 0)
+                printf("%d ", i-1);
+            else if (j == 1)
+                printf("|%d", (*jeu).plateau.pion[i-2][j-1]);
+            else
+                printf(" %d", (*jeu).plateau.pion[i-2][j-1]);
+        }
+        printf("\n");
+    }
 }
 
 void jeu_table_flip(Jeu *jeu){
@@ -148,27 +155,62 @@ int init_plateau(Plateau *plateau){
 int fin_de_partie(Plateau *plateau){
     for (int i=0; i<TAILLE; i++){
         for (int j=0; j<TAILLE; j++){
-            if (!plateau_pion_peut_sauter(plateau, i, j)){
-                return 1;
+            if (plateau_pion_peut_sauter(plateau, i, j)){
+                return 0;
             }
         }
     }
-    return 0;
+    return 1;
 }
 
 int main(void) {
     Jeu jeu;
+    int i_pion = 0, j_pion = 0;
     init_plateau(&jeu.plateau);
-    printf("Combien de joueur :");
+    printf("Combien de joueur : ");
     scanf("%d", &jeu.nb_joueurs);
+    jeu.nb_joueurs -= 1;
     for (int i = 0; i < jeu.nb_joueurs; i++){
         jeu.joueur[i].etat = 1;
         jeu.joueur[i].score = 0;
     }
+    jeu.nb_joueurs_actif = jeu.nb_joueurs + 1;
     jeu.tour = 0;
     jeu.joueur_courant = 0;
+    jeu.pion_i = i_pion;
+    jeu.pion_j = j_pion;
+    jeu.pion_est_saisi = 0;
     do{
-        jeu_charger(&jeu);
-    } while (!fin_de_partie);
+        for (int i=0; i<jeu.nb_joueurs_actif; i++){
+            jeu_afficher(&jeu);
+            if (jeu.tour == 0){
+                do {
+                    printf("Position du pion blanc à retirer : ");
+                    scanf("%d %d", &i_pion, &j_pion);
+                    i_pion -= 1;
+                    j_pion -= 1;
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] != 1);
+                jeu_saisir_pion(&jeu, i_pion, j_pion);
+                jeu_capturer(&jeu, jeu.pion_i, jeu.pion_j);
+            } else {
+                do {
+                    printf("Position du pion sauteur : ");
+                    scanf("%d %d", i_pion, j_pion);
+                    i_pion -= 1;
+                    j_pion -= 1;
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] == 0);
+                jeu_saisir_pion(&jeu, i_pion, j_pion);
+                do {
+                    printf("Position du saut : ");
+                    scanf("%d %d", i_pion, j_pion);
+                    i_pion -= 1;
+                    j_pion -= 1;
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] != 0);
+                jeu_sauter_vers(&jeu, i_pion, j_pion);
+            }
+            jeu_joueur_suivant(&jeu);
+        }
+        jeu.tour += 1;
+    } while (!fin_de_partie(&jeu.plateau));
     return 0;
 }
