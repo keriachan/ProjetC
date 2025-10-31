@@ -228,12 +228,12 @@ int fin_de_partie(Plateau *plateau){
 int penalite(Plateau *plateau){
     int sum = 0;
     for (int i=0; i<TAILLE; i++){
-        for (int j=0; j<TAILLE; i++){
-            if ((*plateau).pion[i][j] == "o")
+        for (int j=0; j<TAILLE; j++){
+            if ((*plateau).pion[i][j] == 1)
                 sum += 1;
-            else if ((*plateau).pion[i][j] == "x")
+            else if ((*plateau).pion[i][j] == 2)
                 sum += 5;
-            else if ((*plateau).pion[i][j] == "+")
+            else if ((*plateau).pion[i][j] == 3)
                 sum += 8;
         }
     }
