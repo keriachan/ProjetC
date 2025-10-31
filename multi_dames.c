@@ -86,7 +86,7 @@ int jeu_arreter(Jeu *jeu){
 
 int jeu_joueur_suivant(Jeu *jeu){
     do {
-        (*jeu).joueur_courant = ((*jeu).joueur_courant + 1) % (*jeu).nb_joueurs;
+        (*jeu).joueur_courant = ((*jeu).joueur_courant + 1) % ((*jeu).nb_joueurs+1);
     } while ((*jeu).joueur[(*jeu).joueur_courant].etat == 0);
     (*jeu).pion_est_saisi = 0;
     (*jeu).pion_i = 0;
