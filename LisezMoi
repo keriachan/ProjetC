@@ -1,0 +1,27 @@
+-- Groupe de TP : DLMI
+
+
+-- Vos noms :
+- RAÏS Djibril
+- FAHLOUNE Yani
+
+
+-- Compiler le programme :
+
+- "clang -std=c17 -Wall multi_dames.c -o md" dans un terminal qui contient clang puis en écrivant : ./md
+
+
+-- Comment jouer :
+
+On commence d'abord par choisir le nombre de joueurs maximum.
+Ensuite, à chaque premier tour, on peut retirer un pion blanc.
+On peut choisir de faire sauter les pions afin de capturer des pions qui vont s'ajouter à notre score.
+Un joueur peut décider d'arrêter une partie.
+Le joueur avec le plus de points à la fin gagne la partie.
+Les pions blanc (o) rapportent 1 point, les pions rouges (x) rapportent 5 points et les pions noirs (+) rapportent 8 points.
+
+
+-- Difficultés rencontrées et comment elles ont été surmontées :
+
+- Nous avons beaucoup eu de difficultés à trouver une fonction correcte qui permet de bien détecter si le saut d'un pion est possible ou non.
+- La gestion des sauts multiples a aussi été compliquée à réaliser.
