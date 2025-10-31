@@ -225,6 +225,21 @@ int fin_de_partie(Plateau *plateau){
     return 1;
 }
 
+int penalite(Plateau *plateau){
+    int sum = 0;
+    for (int i=0; i<TAILLE; i++){
+        for (int j=0; j<TAILLE; i++){
+            if ((*plateau).pion[i][j] == "o")
+                sum += 1;
+            else if ((*plateau).pion[i][j] == "x")
+                sum += 5;
+            else if ((*plateau).pion[i][j] == "+")
+                sum += 8;
+        }
+    }
+    return sum;
+}
+
 int main(void) {
     Jeu jeu;
     int i_pion = 0, j_pion = 0;
@@ -281,6 +296,7 @@ int main(void) {
         }
         jeu.tour += 1;
     } while (!fin_de_partie(&jeu.plateau));
+    jeu.joueur[jeu.joueur_courant].score -= penalite(&jeu.plateau);
     printf("Fin de jeu\n");
     return 0;
 }
