@@ -249,27 +249,21 @@ int main(void) {
                 do {
                     printf("Position du pion blanc à retirer : ");
                     scanf("%d %d", &i_pion, &j_pion);
-                    i_pion -= 1;
-                    j_pion -= 1;
-                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] != 1);
-                jeu_saisir_pion(&jeu, i_pion, j_pion);
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion-1][j_pion-1] != 1);
+                jeu_saisir_pion(&jeu, i_pion-1, j_pion-1);
                 jeu_capturer(&jeu, jeu.pion_i, jeu.pion_j);
             } else {
                 do {
                     printf("Position du pion sauteur : ");
                     scanf("%d %d", &i_pion, &j_pion);
-                    i_pion -= 1;
-                    j_pion -= 1;
-                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] == 0);
-                jeu_saisir_pion(&jeu, i_pion, j_pion);
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion-1][j_pion-1] == 0);
+                jeu_saisir_pion(&jeu, i_pion-1, j_pion-1);
                 do {
                     afficher_sauts_possibles_pion(&jeu.plateau, i_pion, j_pion);
                     printf("Position du saut : ");
                     scanf("%d %d", &i_pion, &j_pion);
-                    i_pion -= 1;
-                    j_pion -= 1;
-                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion][j_pion] != 0);
-                jeu_sauter_vers(&jeu, i_pion, j_pion);
+                } while (!case_est_valide(i_pion, j_pion) || jeu.plateau.pion[i_pion-1][j_pion-1] != 0);
+                jeu_sauter_vers(&jeu, i_pion-1, j_pion-1);
             }
             jeu_joueur_suivant(&jeu);
         }
