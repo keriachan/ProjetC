@@ -50,10 +50,15 @@ int jeu_saisir_pion(Jeu *jeu, int i, int j){
     return 1;
 }
 
-int jeu_sauter_vers(Jeu *jeu, int i, int j){ // assurer qu'on peu bien sauter en i j
+int jeu_sauter_vers(Jeu *jeu, int i, int j){ // assurer qu'on peut bien sauter en i j
+    int src_i = (*jeu).pion_i;
+    int src_j = (*jeu).pion_j;
     int cap_i = ((*jeu).pion_i + i)/2;
     int cap_j = ((*jeu).pion_j + j)/2;
     jeu_capturer(jeu, cap_i, cap_j);
+    int couleur_pion_src=(*jeu).plateau.pion[src_i][src_j];
+    (*jeu).plateau.pion[src_i][src_j]=0;
+    (*jeu).plateau.pion[i][j]=couleur_pion_src;
     (*jeu).pion_i = i;
     (*jeu).pion_j = j;
     return 1;
