@@ -86,7 +86,7 @@ int jeu_arreter(Jeu *jeu){
 
 int jeu_joueur_suivant(Jeu *jeu){
     do {
-        (*jeu).joueur_courant = (*jeu).joueur_courant % (*jeu).nb_joueurs + 1;
+        (*jeu).joueur_courant = ((*jeu).joueur_courant + 1) % (*jeu).nb_joueurs;
     } while ((*jeu).joueur[(*jeu).joueur_courant].etat == 0);
     (*jeu).pion_est_saisi = 0;
     (*jeu).pion_i = 0;
@@ -95,11 +95,37 @@ int jeu_joueur_suivant(Jeu *jeu){
 }
 
 void jeu_charger(Jeu *jeu) {
-    
+    scanf("%d %d %d", &(*jeu).nb_joueurs, &(*jeu).tour, &(*jeu).joueur_courant);
+    for (int i = 0; i < (*jeu).nb_joueurs; i++) {
+        scanf("%d %d", &(*jeu).joueur[i].etat, &(*jeu).joueur[i].score);
+    }
+    scanf("%d %d %d", &(*jeu).pion_est_saisi, &(*jeu).pion_i, &(*jeu).pion_j);
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            scanf("%d", &(*jeu).plateau.pion[i][j]);
+        }
+    }
+
+    // Mise à jour du nombre de joueurs actifs (utile pour ta logique interne)
+    jeu->nb_joueurs_actif = 0;
+    for (int i = 0; i < jeu->nb_joueurs; i++) {
+        if (jeu->joueur[i].etat == 1)
+            jeu->nb_joueurs_actif++;
+    }
 }
 
 void jeu_ecrire(Jeu *jeu){
-    
+    printf("%d %d %d\n", (*jeu).nb_joueurs, (*jeu).tour, (*jeu).joueur_courant);
+    for (int i = 0; i < (*jeu).nb_joueurs; i++) {
+        printf("%d %d\n", (*jeu).joueur[i].etat, (*jeu).joueur[i].score);
+    }
+    printf("%d %d %d\n", (*jeu).pion_est_saisi, (*jeu).pion_i, (*jeu).pion_j);
+    for (int i = 0; i < TAILLE; i++) {
+        for (int j = 0; j < TAILLE; j++) {
+            printf("%d ", (*jeu).plateau.pion[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 int plateau_pion_peut_sauter(Plateau *plateau, int i, int j){
