@@ -142,10 +142,11 @@ void jeu_afficher(Jeu *jeu){
         printf("Score:\n    J1  J2  J3  J4\n    %d   %d   %d   %d\n", (*jeu).joueur[0].score, (*jeu).joueur[1].score, (*jeu).joueur[2].score, (*jeu).joueur[3].score);
     }
     printf("Tour: %d\nJoueur %d\nPlateau:\n", (*jeu).tour, (*jeu).joueur_courant + 1);
+    char pions[] = {' ', 'o', 'x', '+'};
     for (int i = 0; i < TAILLE + 2; i++){
         for (int j = 0; j < TAILLE + 1; j++){
             if ((i == 0 || i == 1) && j == 0)
-                printf("  ");
+                printf("   ");
             else if (i == 0)
                 printf(" %d", j);
             else if (i == 1)
@@ -153,9 +154,9 @@ void jeu_afficher(Jeu *jeu){
             else if (j == 0)
                 printf("%d ", i-1);
             else if (j == 1)
-                printf("|%d", (*jeu).plateau.pion[i-2][j-1]);
+                printf("| %c", pions[(*jeu).plateau.pion[i-2][j-1]]);
             else
-                printf(" %d", (*jeu).plateau.pion[i-2][j-1]);
+                printf(" %c", pions[(*jeu).plateau.pion[i-2][j-1]]);
         }
         printf("\n");
     }
